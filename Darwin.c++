@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
 #include "Darwin.h"
 
 void World::addCreature(Creature& c, unsigned x, unsigned y) {
@@ -12,33 +13,60 @@ void World::addCreature(Creature& c, unsigned x, unsigned y) {
 
 void World::round() {
   std::vector<int>::iterator b = _g.begin(), e = _g.end();
+  int i = 0;
   while(b != e) {
     if(*b) {
-      int action = _c.at(*b - 1).act();
+      Creature& c = _c.at(*b - 1);
+      Direction d = c.facing();
+      Creature* o = NULL;
+      int ahead = WALL;
+
+      int index;
+      switch(d) {
+      case NORTH: index = i-_xsize;
+      case SOUTH: index = i+_xsize;
+      case EAST : index = i+1;
+      case WEST : index = i-1;
+      }
+      if( index > 0 && index < (int)_g.size() ) {
+        int thisisdumb = _g.at(index);
+        if(thisisdumb) {
+          ahead = CREATURE;
+          o     = &_c.at(thisisdumb - 1);
+        } else
+          ahead = EMPTY;
+      }
+
+      int action = c.act( ahead, &(o->species()) );
       if(action < 0) {
         //Invalid species or creature
       } else if (action == 1) {
-        //HOP
+        if( ahead == EMPTY ) { //Should be redundant
+          _g[index] = *b;
+          *b = 0;
+        } //else?
       } else if (action == 2) {
-        //INFECT
-      } else { //action should be 0, creature turned
+        if( ahead == CREATURE && o != NULL) //Hopefully redundant
+          (*o).infect( c.species() );
+      } else { //action should be 0, creature turned or did nothing
         assert(action==0);
       }
     }
-    ++b;
+    ++b; ++i;
   }
+
 }
 
 void World::print(std::ostream& o) {
-  o << "  ";
-  for(int i = 0; i < _xsize; ++i)
+  o << ' ' << ' ';
+  for(unsigned i = 0; i < _xsize; ++i)
     o << i%10;
-  o << endl;
-  for(int j = 0; j < _ysize; ++j) {
+  o << std::endl;
+  for(unsigned j = 0; j < _ysize; ++j) {
     o << j%10 << ' ';
-    for(int i = 0; i < _xsize; ++i)
-      o << _c.at(_g.at(i + j*_xsize) - 1).cname();
-    o << endl;
+    for(unsigned i = 0; i < _xsize; ++i)
+      _c.at(_g.at(i + j*_xsize) - 1).print(o);
+    o << std::endl;
   }
 }
 
@@ -46,8 +74,12 @@ void Species::addInstruction(Line l) {
   program.push_back(l);
 }
 
-Line Species::seeInstruction(unsigned i) throw std::out_of_range{
+Line Species::seeInstruction(unsigned i) {
   return program.at(i);
+}
+
+void Species::print(std::ostream& o) {
+  o << name;
 }
 
 void Creature::turn_l() {
@@ -68,7 +100,7 @@ void Creature::turn_r() {
   }
 }
 
-int Creature::act(int ahead, Species* other) throw std::out_of_range {
+int Creature::act(int ahead, Species* other) {
   int action = -1;
   while(action < 0) {
     Line line = _sp.seeInstruction(_pc);
@@ -102,11 +134,19 @@ int Creature::act(int ahead, Species* other) throw std::out_of_range {
   return action;
 }
 
-Direction Creature::facing() {
+Direction Creature::facing() const{
   return _dir;
+}
+
+Species& Creature::species() const{
+  return _sp;
 }
 
 void Creature::infect(Species& other) {
   _sp = other;
   _pc = 0;
+}
+
+void Creature::print(std::ostream& o) {
+  _sp.print(o);
 }

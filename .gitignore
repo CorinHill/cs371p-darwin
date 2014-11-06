@@ -10,4 +10,7 @@
 *.gcov
 RunDarwin.out.txt
 *.swp
-
+RunDarwin
+TestDarwin
+RunDarwin.tmp
+TestDarwin.tmp
