@@ -41,7 +41,7 @@ private:
   std::vector<Line> program;
 public:
   void addInstruction(Line l);
-  void seeInstruction(unsigned i);
+  Line seeInstruction(unsigned i) throw std::out_of_range;
 };
 
 class Creature {
@@ -56,9 +56,9 @@ public:
   Creature(const Species& sp, Direction dir = NORTH) :
     _sp(sp), _pc(0), _dir(dir) {
   }
-  int       act(int ahead, const Species& other);
+  int       act(int ahead, Species* other) throw std::out_of_range;
   Direction facing() const;
-  void      infect();
+  void      infect(Species& other);
 };
 
 #endif

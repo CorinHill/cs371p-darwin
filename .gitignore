@@ -9,4 +9,5 @@
 *.gcno
 *.gcov
 RunDarwin.out.txt
+*.swp
 
