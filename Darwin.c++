@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
-#include <set>
+#include <unordered_set>
 #include "Darwin.h"
 
 void World::addCreature(Creature& c, unsigned y, unsigned x) {
@@ -14,11 +14,14 @@ void World::addCreature(Creature& c, unsigned y, unsigned x) {
 
 
 void World::round() {
+  std::unordered_set<int> acted;
   for(unsigned j = 0; j < _ysize; ++j) {
     for(unsigned i = 0; i < _xsize; ++i) {
       int curr_index = i + j*_xsize;
-      if (_g.at(curr_index)) {
-        Creature& c = _c.at( _g.at(curr_index) - 1 );
+      int g = _g.at(curr_index);
+      if (g && !acted.count(g) ) {
+        acted.insert(g);
+        Creature& c = _c.at( g - 1 );
         int ahead = WALL;
         Creature* o = NULL;
         int next_index, bound;
