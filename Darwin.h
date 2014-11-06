@@ -38,8 +38,8 @@ public:
 class Species {
 private:
   std::vector<Line> program;
-  char              name;
 public:
+  char              name;
   Species(char c = '?') :
     program(), name(c) {}
   void addInstruction(Line l);

@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+#include <set>
 #include "Darwin.h"
 
 void World::addCreature(Creature& c, unsigned y, unsigned x) {
@@ -11,8 +12,46 @@ void World::addCreature(Creature& c, unsigned y, unsigned x) {
   }
 }
 
+
 void World::round() {
-  std::vector<int>::iterator b = _g.begin(), e = _g.end();
+  for(unsigned j = 0; j < _ysize; ++j) {
+    for(unsigned i = 0; i < _xsize; ++i) {
+      int curr_index = i + j*_xsize;
+      if (_g.at(curr_index)) {
+        Creature& c = _c.at( _g.at(curr_index) - 1 );
+        int ahead = WALL;
+        Creature* o = NULL;
+        int next_index, bound;
+        switch(c.facing()) {
+        case NORTH: next_index = curr_index - _xsize; bound =                  (curr_index<(int)_xsize)?1:0; break;
+        case EAST : next_index = curr_index + 1;      bound = (curr_index%(int)_xsize == (int)_xsize-1)?1:0; break;
+        case SOUTH: next_index = curr_index + _xsize; bound = (curr_index>=(int)_xsize*((int)_ysize-1))?1:0; break;
+        case WEST : next_index = curr_index - 1;      bound =             (curr_index%(int)_xsize == 0)?1:0; break;
+        }
+        if( !bound ) {
+          int tmp = _g.at(next_index);
+          if( tmp ) {
+            ahead = CREATURE;
+            o     = &_c.at(tmp - 1);
+          } else
+            ahead = EMPTY;
+        }
+        int action = c.act( ahead, (o)?o->species():c.species() );
+        if( action == 1 ) {
+          if( ahead == EMPTY ) {
+            _g[next_index] = _g[curr_index];
+            _g[curr_index] = 0;
+          }
+        } else if ( action == 2 ) {
+          if( ahead == CREATURE && o ) {
+            o->infect( c.species() );
+          }
+        }
+      }
+    }
+  }
+
+/*  std::vector<int>::iterator b = _g.begin(), e = _g.end();
   int i = 0;
   while(b != e) {
     if(*b) {
@@ -23,10 +62,10 @@ void World::round() {
 
       int index;
       switch(d) {
-      case NORTH: index = i-_xsize; break;
-      case SOUTH: index = i+_xsize; break;
-      case EAST : index = i+1; break;
-      case WEST : index = i-1; break;
+      case NORTH: index = i-1     ; break;
+      case SOUTH: index = i+1     ; break;
+      case EAST : index = i+_ysize; break;
+      case WEST : index = i-_ysize; break;
       }
       if( index > 0 && index < (int)_g.size() ) {
         int thisisdumb = _g.at(index);
@@ -51,10 +90,11 @@ void World::round() {
       } else { //action should be 0, creature turned or did nothing
         assert(action==0);
       }
-    }
+      printf("%c\n",c.species().name);
+    } else printf("%c\n",'.');
     ++b; ++i;
   }
-
+*/
 }
 
 void World::print(std::ostream& o) {
@@ -121,7 +161,7 @@ int Creature::act(int ahead, Species& other) {
     case RIGHT : action = 0;
       turn_r(); break;
     case INFECT: action = 0;
-      if(ahead==CREATURE && &other==&_sp) action = 2;
+      if(ahead==CREATURE && &other!=&_sp) action = 2;
       break;
     case IF_E  :
       if(ahead == EMPTY) _pc = line.target;
@@ -133,7 +173,7 @@ int Creature::act(int ahead, Species& other) {
       if(std::rand()&1) _pc = line.target;
       break;
     case IF_N  :
-      if(ahead == CREATURE) _pc = line.target;
+      if(ahead == CREATURE && &other!=&_sp) _pc = line.target;
       break;
     case GO    :
       _pc = line.target;
