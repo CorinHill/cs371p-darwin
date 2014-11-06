@@ -28,8 +28,8 @@ private:
   size_t _xsize;
   size_t _ysize;
 public:
-  World(size_t x = 0, size_t y = 0) :
-    _g(x*y), _c(),  _xsize(x), _ysize(y) {}
+  World(size_t y = 0, size_t x = 0) :
+    _g(x*y), _c(),  _xsize(x), _ysize(y) { }
   void addCreature(Creature& c, unsigned x, unsigned y);
   void round();
   void print(std::ostream& o);
@@ -43,6 +43,7 @@ public:
   Species(char c = '?') :
     program(), name(c) {}
   void addInstruction(Line l);
+  void addInstruction(Instruction i, int t);
   Line seeInstruction(unsigned i);
   void print(std::ostream& o);
 };

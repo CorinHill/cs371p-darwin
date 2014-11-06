@@ -64,14 +64,23 @@ void World::print(std::ostream& o) {
   o << std::endl;
   for(unsigned j = 0; j < _ysize; ++j) {
     o << j%10 << ' ';
-    for(unsigned i = 0; i < _xsize; ++i)
-      _c.at(_g.at(i + j*_xsize) - 1).print(o);
+    for(unsigned i = 0; i < _xsize; ++i) {
+      int index = _g.at(i + j*_xsize);
+      if( index )
+         _c.at(index - 1).print(o);
+      else
+         o << '.';
+    }
     o << std::endl;
   }
 }
 
 void Species::addInstruction(Line l) {
   program.push_back(l);
+}
+void Species::addInstruction(Instruction i, int t) {
+  Line l = {i, t};
+  addInstruction(l);
 }
 
 Line Species::seeInstruction(unsigned i) {

@@ -24,7 +24,9 @@ int main () {
     // ----
     // food
     // ----
-
+    Species food('f');
+    food.addInstruction(LEFT,0);
+    food.addInstruction(GO,0);
     /*
      0: left
      1: go 0
@@ -33,7 +35,9 @@ int main () {
     // ------
     // hopper
     // ------
-
+    Species hop('h');
+    hop.addInstruction(HOP,0);
+    hop.addInstruction(GO,0);
     /*
      0: hop
      1: go 0
@@ -42,7 +46,18 @@ int main () {
     // -----
     // rover
     // -----
-
+    Species rover('r');
+    rover.addInstruction(IF_N,9);
+    rover.addInstruction(IF_E,7);
+    rover.addInstruction(IF_R,5);
+    rover.addInstruction(LEFT,0);
+    rover.addInstruction(GO,0);
+    rover.addInstruction(RIGHT,0);
+    rover.addInstruction(GO,0);
+    rover.addInstruction(HOP,0);
+    rover.addInstruction(GO,0);
+    rover.addInstruction(INFECT,0);
+    rover.addInstruction(GO,0);
     /*
      0: if_enemy 9
      1: if_empty 7
@@ -60,7 +75,12 @@ int main () {
     // ----
     // trap
     // ----
-
+    Species trap('t');
+    trap.addInstruction(IF_E,3);
+    trap.addInstruction(LEFT,0);
+    trap.addInstruction(GO,0);
+    trap.addInstruction(INFECT,0);
+    trap.addInstruction(GO,0);
     /*
      0: if_enemy 3
      1: left
@@ -72,8 +92,21 @@ int main () {
     // ----------
     // darwin 8x8
     // ----------
-
+    {
     cout << "*** Darwin 8x8 ***" << endl;
+    World d8x8(8,8);
+    Creature f1(food,EAST);
+    d8x8.addCreature(f1,0,0);
+    Creature h1(hop,NORTH);
+    d8x8.addCreature(h1,3,3);
+    Creature h2(hop,EAST);
+    d8x8.addCreature(h2,3,4);
+    Creature h3(hop,SOUTH);
+    d8x8.addCreature(h3,4,4);
+    Creature h4(hop,WEST);
+    d8x8.addCreature(h4,4,3);
+    Creature f2(food,NORTH);
+    d8x8.addCreature(f2,7,7);
     /*
     8x8 Darwin
     Food,   facing east,  at (0, 0)
@@ -85,13 +118,28 @@ int main () {
     Simulate 5 moves.
     Print every grid.
     */
-
+    for(int i=0;i<6;++i){
+      cout << "Turn = " << i << '.' << endl;
+      d8x8.print(cout);
+      cout << endl;
+      d8x8.round();
+    }
+    } 
     // ----------
     // darwin 7x9
     // ----------
-
+    {
     cout << "*** Darwin 7x9 ***" << endl;
     srand(0);
+    World d7x9(7,9);
+    Creature t1(trap,SOUTH);
+    d7x9.addCreature(t1,0,0);
+    Creature h1(hop,EAST);
+    d7x9.addCreature(h1,3,2);
+    Creature r1(rover,NORTH);
+    d7x9.addCreature(r1,5,4);
+    Creature t2(trap,WEST);
+    d7x9.addCreature(t2,6,8);
     /*
     7x9 Darwin
     Trap,   facing south, at (0, 0)
@@ -101,7 +149,13 @@ int main () {
     Simulate 5 moves.
     Print every grid.
     */
-
+    for(int i=0;i<6;++i){
+      cout << "Turn = " << i << '.' << endl;
+      d7x9.print(cout);
+      cout << endl;
+      d7x9.round();
+    }
+    }
     // ------------
     // darwin 72x72
     // without best
