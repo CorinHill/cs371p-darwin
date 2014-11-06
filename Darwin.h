@@ -29,7 +29,7 @@ private:
   size_t _ysize;
 public:
   World(size_t y = 0, size_t x = 0) :
-    _g(x*y), _c(),  _xsize(x), _ysize(y) { }
+    _g(x*y), _c(),  _xsize(x), _ysize(y) {}
   void addCreature(Creature& c, unsigned x, unsigned y);
   void round();
   void print(std::ostream& o);
@@ -59,7 +59,7 @@ private:
 public:
   Creature(Species& sp, Direction dir = NORTH) :
     _sp(sp), _pc(0), _dir(dir) {}
-  int       act(int ahead, Species* other);
+  int       act(int ahead, Species& other);
   Direction facing() const;
   Species& species() const;
   void      infect(Species& other);

@@ -3,7 +3,7 @@
 #include <iostream>
 #include "Darwin.h"
 
-void World::addCreature(Creature& c, unsigned x, unsigned y) {
+void World::addCreature(Creature& c, unsigned y, unsigned x) {
   try {
     _g.at(x + y*_xsize) = _c.size() + 1; // Want to do this first so I don't add the creature if the position is invalid. However, I use 0 as the empty notation, so add 1...
     _c.push_back(c);
@@ -23,10 +23,10 @@ void World::round() {
 
       int index;
       switch(d) {
-      case NORTH: index = i-_xsize;
-      case SOUTH: index = i+_xsize;
-      case EAST : index = i+1;
-      case WEST : index = i-1;
+      case NORTH: index = i-_xsize; break;
+      case SOUTH: index = i+_xsize; break;
+      case EAST : index = i+1; break;
+      case WEST : index = i-1; break;
       }
       if( index > 0 && index < (int)_g.size() ) {
         int thisisdumb = _g.at(index);
@@ -37,7 +37,7 @@ void World::round() {
           ahead = EMPTY;
       }
 
-      int action = c.act( ahead, &(o->species()) );
+      int action = c.act( ahead, (o)?o->species():c.species() );
       if(action < 0) {
         //Invalid species or creature
       } else if (action == 1) {
@@ -109,7 +109,7 @@ void Creature::turn_r() {
   }
 }
 
-int Creature::act(int ahead, Species* other) {
+int Creature::act(int ahead, Species& other) {
   int action = -1;
   while(action < 0) {
     Line line = _sp.seeInstruction(_pc);
@@ -121,7 +121,7 @@ int Creature::act(int ahead, Species* other) {
     case RIGHT : action = 0;
       turn_r(); break;
     case INFECT: action = 0;
-      if(ahead==CREATURE && other==&_sp) action = 2;
+      if(ahead==CREATURE && &other==&_sp) action = 2;
       break;
     case IF_E  :
       if(ahead == EMPTY) _pc = line.target;
