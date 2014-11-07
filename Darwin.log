@@ -1,0 +1,71 @@
+commit 94436e0cf805b609fcb413481f16762d05b9e135
+Author: Corin Hill <corin@cs.utexas.edu>
+Date:   Fri Nov 7 00:09:37 2014 -0600
+
+    doxygen
+
+commit f268b9f0a0f28bad92042af935667f8321495c09
+Author: Corin Hill <corin@cs.utexas.edu>
+Date:   Fri Nov 7 00:07:06 2014 -0600
+
+    comments
+
+commit 8a9f16724093309c70f1f845384722ffdbb8165e
+Author: Acedaemon <Acedaemon@localhost.localdomain>
+Date:   Thu Nov 6 23:44:01 2014 -0600
+
+    adding uml...
+
+commit e4c1e9c020935894eb5e205594b69a6ece56ab61
+Author: Corin Hill <corin@cs.utexas.edu>
+Date:   Thu Nov 6 23:42:08 2014 -0600
+
+    Finished writing tests
+
+commit bd203d3777209976de0dc065835dc7be69ec0f10
+Author: Corin Hill <corin@cs.utexas.edu>
+Date:   Thu Nov 6 17:47:37 2014 -0600
+
+    Creatures only act once per round
+
+commit bf345a615e456adff36dd9e0bb6fd00bed4dbaa9
+Author: Corin Hill <corin@cs.utexas.edu>
+Date:   Thu Nov 6 17:40:31 2014 -0600
+
+    No more wrap around issue
+
+commit e310808f209b6c32aee85f93e702b1d99c3fad8b
+Author: Corin Hill <corin@cs.utexas.edu>
+Date:   Thu Nov 6 00:23:58 2014 -0600
+
+    Fixed switch fall through
+
+commit 9dff427a2bb199114a1726b644ac6e1f05a38577
+Author: Corin Hill <corin@cs.utexas.edu>
+Date:   Wed Nov 5 23:41:00 2014 -0600
+
+    Added first two grids in RunDarwin, closes #12
+
+commit aca5de880865e2b1f64c9326778ef96e5b88e909
+Author: Corin Hill <corin@cs.utexas.edu>
+Date:   Wed Nov 5 23:01:16 2014 -0600
+
+    Finished simple solution
+
+commit 1a90409b5a8feb253afe5a2c38597cfe917503fd
+Author: Corin Hill <corin@cs.utexas.edu>
+Date:   Wed Nov 5 21:20:28 2014 -0600
+
+    Simple Solution. Closes #5
+
+commit 25bb9fda16c6679c46a590e02a645f4fdb71ee90
+Author: Corin Hill <corin@cs.utexas.edu>
+Date:   Wed Nov 5 14:37:32 2014 -0600
+
+    Created files, wrote header
+
+commit cb82888f495d0aab6c0ec8db1d4e286b7d14c1ac
+Author: Corin Hill <corin@cs.utexas.edu>
+Date:   Tue Nov 4 13:57:10 2014 -0600
+
+    Initial files
