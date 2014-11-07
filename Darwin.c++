@@ -152,10 +152,10 @@ void Creature::turn_r() {
   }
 }
 
-int Creature::act(int ahead, Species& other) {
+int Creature::act(int ahead, Species* other) {
   int action = -1;
   while(action < 0) {
-    Line line = _sp.seeInstruction(_pc);
+    Line line = _sp->seeInstruction(_pc);
     ++_pc;
     switch(line.ins) {
     case HOP   : action = 1; break;
@@ -164,7 +164,7 @@ int Creature::act(int ahead, Species& other) {
     case RIGHT : action = 0;
       turn_r(); break;
     case INFECT: action = 0;
-      if(ahead==CREATURE && &other!=&_sp) action = 2;
+      if(ahead==CREATURE && other!=_sp) action = 2;
       break;
     case IF_E  :
       if(ahead == EMPTY) _pc = line.target;
@@ -176,7 +176,7 @@ int Creature::act(int ahead, Species& other) {
       if(std::rand()&1) _pc = line.target;
       break;
     case IF_N  :
-      if(ahead == CREATURE && &other!=&_sp) _pc = line.target;
+      if(ahead == CREATURE && other!=_sp) _pc = line.target;
       break;
     case GO    :
       _pc = line.target;
@@ -190,15 +190,15 @@ Direction Creature::facing() const{
   return _dir;
 }
 
-Species& Creature::species() const{
+Species* Creature::species() const{
   return _sp;
 }
 
-void Creature::infect(Species& other) {
+void Creature::infect(Species* other) {
   _sp = other;
   _pc = 0;
 }
 
 void Creature::print(std::ostream& o) {
-  _sp.print(o);
+  _sp->print(o);
 }

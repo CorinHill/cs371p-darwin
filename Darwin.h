@@ -12,11 +12,14 @@
 #define EMPTY    0
 #define WALL     1
 #define CREATURE 2
-enum Direction   {NORTH, SOUTH, EAST, WEST};
+enum Direction   {NORTH=1, SOUTH=3, EAST=2, WEST=0};
 enum Instruction {HOP, LEFT, RIGHT, INFECT, IF_E, IF_W, IF_R, IF_N, GO};
 struct Line {
   Instruction ins;
   int target;
+  bool operator==(const Line other) {
+    return (ins==other.ins)&&(target==other.target);
+  }
 };
 class World; class Species; class Creature;
 
@@ -29,7 +32,9 @@ private:
   size_t _ysize;
 public:
   World(size_t y = 0, size_t x = 0) :
-    _g(x*y), _c(),  _xsize(x), _ysize(y) {}
+    _g(x*y), _c(),  _xsize(x), _ysize(y) {
+    _c.reserve(20);
+  }
   void addCreature(Creature& c, unsigned x, unsigned y);
   void round();
   void print(std::ostream& o);
@@ -50,19 +55,21 @@ public:
 
 class Creature {
 private:
-  Species&  _sp;
+  Species*  _sp;
   unsigned  _pc;
   Direction _dir;
 
   void turn_l();
   void turn_r();
 public:
-  Creature(Species& sp, Direction dir = NORTH) :
+  Creature(Species* sp, Direction dir = NORTH) :
     _sp(sp), _pc(0), _dir(dir) {}
-  int       act(int ahead, Species& other);
+  Creature(Species& sp, Direction dir = NORTH) :
+    _sp(&sp), _pc(0), _dir(dir) {}
+  int       act(int ahead, Species* other);
   Direction facing() const;
-  Species& species() const;
-  void      infect(Species& other);
+  Species* species() const;
+  void      infect(Species* other);
   void print(std::ostream& o);
 };
 
