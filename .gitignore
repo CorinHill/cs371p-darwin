@@ -14,3 +14,5 @@ RunDarwin
 TestDarwin
 RunDarwin.tmp
 TestDarwin.tmp
+Doxyfile
+latex/
